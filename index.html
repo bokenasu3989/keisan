@@ -24,11 +24,11 @@
   <!-- メインカード -->
   <div class="bg-white rounded-2xl shadow-md p-6 border border-slate-200 space-y-6">
     
-    <!-- 1. 条件設定 -->
+    <!-- STEP 1: 条件選択 & 実測中央値参照 -->
     <div>
-      <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">STEP 1 : 条件選択</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
+      <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">STEP 1 : 条件選択（実測参考値）</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        
         <!-- 締め時間 -->
         <div>
           <label class="block text-xs font-bold text-slate-600 mb-1">
@@ -91,72 +91,71 @@
         </div>
 
       </div>
-    </div>
 
-    <!-- 参考実測値ミニパネル -->
-    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-      <div class="text-xs font-bold text-slate-500 mb-2 flex justify-between items-center">
-        <span><i class="fa-solid fa-database text-indigo-500 mr-1"></i>ボーダー参考値</span>
-      </div>
-      <div class="grid grid-cols-3 gap-2 text-center">
-        <div class="bg-white p-2 rounded border border-slate-200">
-          <div class="text-[10px] text-slate-400">平均</div>
-          <div id="refAvg" class="text-sm font-bold text-slate-700">0</div>
+      <!-- 実測参考値（中央値）表示パネル -->
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5">
+        <div class="text-xs font-bold text-slate-500 mb-2 flex justify-between items-center">
+          <span><i class="fa-solid fa-database text-indigo-500 mr-1"></i>ボーダー実測参考値</span>
         </div>
-        <div class="bg-white p-2 rounded border border-red-200">
-          <div class="text-[10px] text-red-400">最高</div>
-          <div id="refMax" class="text-sm font-bold text-red-600">0</div>
-        </div>
-        <div class="bg-white p-2 rounded border border-emerald-200">
-          <div class="text-[10px] text-emerald-500">最低</div>
-          <div id="refMin" class="text-sm font-bold text-emerald-700">0</div>
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div class="bg-white p-2 rounded border border-indigo-200">
+            <div class="text-[10px] text-indigo-500 font-bold">中央</div>
+            <div id="refMed" class="text-sm font-bold text-indigo-900">0</div>
+          </div>
+          <div class="bg-white p-2 rounded border border-red-200">
+            <div class="text-[10px] text-red-400">最高</div>
+            <div id="refMax" class="text-sm font-bold text-red-600">0</div>
+          </div>
+          <div class="bg-white p-2 rounded border border-emerald-200">
+            <div class="text-[10px] text-emerald-500">最低</div>
+            <div id="refMin" class="text-sm font-bold text-emerald-700">0</div>
+          </div>
         </div>
       </div>
     </div>
 
     <hr class="border-slate-100">
 
-    <!-- 2. ポイント & コアファン数入力エリア -->
+    <!-- STEP 2: 入力3項目 -->
     <div>
-      <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">STEP 2 : 現在の配信状況を入力</h2>
-
+      <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">STEP 2 : 計算データの入力（3項目）</h2>
+      
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-        <!-- 目標応援pt -->
+        
+        <!-- 1. 想定pt -->
         <div>
           <div class="flex justify-between items-center mb-1">
             <label class="text-xs font-bold text-slate-700">
-              <i class="fa-solid fa-flag-checkered text-indigo-600 mr-1"></i>目標応援pt
+              <i class="fa-solid fa-flag-checkered text-indigo-600 mr-1"></i>想定pt
             </label>
             <div class="space-x-1">
-              <button onclick="applyRef('avg')" class="text-[10px] bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded transition">平均</button>
-              <button onclick="applyRef('max')" class="text-[10px] bg-red-50 hover:bg-red-100 text-red-700 px-1.5 py-0.5 rounded transition">最高</button>
+              <button onclick="applyRef('med')" class="text-[10px] bg-indigo-100 hover:bg-indigo-200 text-indigo-800 px-1.5 py-0.5 rounded transition font-bold">中央</button>
+              <button onclick="applyRef('max')" class="text-[10px] bg-red-100 hover:bg-red-200 text-red-800 px-1.5 py-0.5 rounded transition">最高</button>
+              <button onclick="applyRef('min')" class="text-[10px] bg-emerald-100 hover:bg-emerald-200 text-emerald-800 px-1.5 py-0.5 rounded transition">最低</button>
             </div>
           </div>
           <div class="relative">
             <input type="text" id="targetPtInput" 
-                   onfocus="onPtFocus(this)" onblur="onPtBlur(this)" oninput="calculateDifference()" 
+                   onfocus="onPtFocus(this)" onblur="onPtBlur(this)" oninput="calculate()" 
                    class="w-full text-base font-bold text-indigo-900 bg-indigo-50/40 border-2 border-indigo-200 rounded-xl py-2 pl-3 pr-8 focus:border-indigo-600 focus:outline-none">
             <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-indigo-400">pt</span>
           </div>
         </div>
 
-        <!-- 現在の応援pt -->
+        <!-- 2. 現在pt -->
         <div>
-          <div class="flex justify-between items-center mb-1">
-            <label class="text-xs font-bold text-slate-700">
-              <i class="fa-solid fa-play text-emerald-600 mr-1"></i>現在の応援pt
-            </label>
-          </div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">
+            <i class="fa-solid fa-play text-emerald-600 mr-1"></i>現在pt
+          </label>
           <div class="relative">
             <input type="text" id="currentPtInput" value="80,000" 
-                   onfocus="onPtFocus(this)" onblur="onPtBlur(this)" oninput="calculateDifference()" 
+                   onfocus="onPtFocus(this)" onblur="onPtBlur(this)" oninput="calculate()" 
                    class="w-full text-base font-bold text-emerald-900 bg-emerald-50/40 border-2 border-emerald-300 rounded-xl py-2 pl-3 pr-8 focus:border-emerald-600 focus:outline-none">
             <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-500">pt</span>
           </div>
         </div>
 
-        <!-- コアファン数 -->
+        <!-- 3. コアファン数 -->
         <div>
           <div class="flex justify-between items-center mb-1">
             <label class="text-xs font-bold text-slate-700">
@@ -166,7 +165,7 @@
             </span>
           </div>
           <div class="relative">
-            <select id="coreCountSelect" onchange="calculateDifference()" 
+            <select id="coreCountSelect" onchange="calculate()" 
                     class="w-full text-base font-bold text-pink-900 bg-pink-50/40 border-2 border-pink-300 rounded-xl py-2.5 pl-3 pr-8 focus:border-pink-600 focus:outline-none">
               <option value="0">0人 (+0%)</option>
               <option value="2">2人 (+1%)</option>
@@ -200,164 +199,159 @@
       </div>
     </div>
 
-    <!-- 3. 計算結果メイン表示カード -->
-    <div id="resultCard" class="bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 text-white rounded-2xl p-6 shadow-xl transition-all">
-      <div class="text-center">
-        <span id="resultSubTitle" class="text-xs font-bold uppercase tracking-wider text-indigo-300 bg-indigo-900/60 px-3 py-1 rounded-full border border-indigo-700/50">
-          目標ボーダーまで あと
-        </span>
-        
-        <!-- メイン数値（差分pt） -->
-        <div class="my-3">
-          <span id="diffPtDisplay" class="text-4xl sm:text-5xl font-black text-yellow-300 tracking-tight">
-            0
-          </span>
-          <span id="diffPtUnit" class="text-lg font-bold text-indigo-200 ml-1">pt</span>
-        </div>
+    <!-- STEP 3: 出力3項目 -->
+    <div id="resultCard" class="bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 text-white rounded-2xl p-6 shadow-xl">
+      <div class="text-xs font-bold text-indigo-300 uppercase tracking-wider mb-4 text-center">
+        計算結果（すべて小数点切り上げ）
       </div>
 
-      <!-- アイテム換算エリア (馬車 5555 / 花火 1080) -->
-      <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/10 space-y-3">
-        <div class="text-xs font-bold text-indigo-200 text-center flex items-center justify-center space-x-1">
-          <i class="fa-solid fa-gift text-yellow-400"></i>
-          <span>必要アイテム目安</span>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        <!-- 出力1: 必要コイン数 -->
+        <div class="bg-black/30 backdrop-blur-md rounded-xl p-4 border border-yellow-500/30 text-center">
+          <div class="text-xs font-bold text-yellow-300 mb-1">
+            <i class="fa-solid fa-coins text-yellow-400 mr-1"></i>必要コイン数
+          </div>
+          <div class="my-2">
+            <span id="neededCoins" class="text-3xl font-black text-yellow-300">0</span>
+            <span id="neededCoinsUnit" class="text-xs font-bold text-yellow-200 ml-1">コイン</span>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-center">
-
-          <!-- 馬車 -->
-          <div class="bg-black/30 p-3.5 rounded-xl border border-amber-500/30 relative overflow-hidden">
-            <div class="text-xs font-bold text-amber-300 mb-1 flex items-center justify-center space-x-1">
-              <span>馬車</span>
-            </div>
-            <div class="my-1">
-              <span id="carriageCount" class="text-2xl font-black text-yellow-300">0</span>
-              <span id="carriageCountUnit" class="text-xs font-bold text-yellow-200 ml-1">個</span>
-            </div>
+        <!-- 出力2: 馬車 -->
+        <div class="bg-black/30 backdrop-blur-md rounded-xl p-4 border border-amber-500/30 text-center">
+          <div class="text-xs font-bold text-amber-300 mb-1">
+            <i class="fa-solid fa-horse-head text-amber-400 mr-1"></i>馬車
           </div>
-          
-          <!-- 花火 -->
-          <div class="bg-black/30 p-3.5 rounded-xl border border-pink-500/30 relative overflow-hidden">
-            <div class="text-xs font-bold text-pink-300 mb-1 flex items-center justify-center space-x-1">
-              <span>花火</span>
-            </div>
-            <div class="my-1">
-              <span id="fireworkCount" class="text-2xl font-black text-yellow-300">0</span>
-              <span id="fireworkCountUnit" class="text-xs font-bold text-yellow-200 ml-1">個</span>
-            </div>
+          <div class="my-2">
+            <span id="carriageCount" class="text-3xl font-black text-white">0</span>
+            <span id="carriageCountUnit" class="text-xs font-bold text-amber-200 ml-1">台</span>
           </div>
-
         </div>
+
+        <!-- 出力3: 花火 -->
+        <div class="bg-black/30 backdrop-blur-md rounded-xl p-4 border border-pink-500/30 text-center">
+          <div class="text-xs font-bold text-pink-300 mb-1">
+            <i class="fa-solid fa-burst text-pink-400 mr-1"></i>花火
+          </div>
+          <div class="my-2">
+            <span id="fireworkCount" class="text-3xl font-black text-white">0</span>
+            <span id="fireworkCountUnit" class="text-xs font-bold text-pink-200 ml-1">発</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="statusDetail" class="mt-4 text-center text-xs text-indigo-200 border-t border-white/10 pt-3">
+        --
       </div>
     </div>
 
   </div>
 
   <script>
-    // 2025年10月1日〜2026年9月30日（過去1年間全デイリーログ）の実測データログ
+    // 2025/10〜2026/09 実測ログ（指標を「中央値(med)」に変更）
     const statsData = {
       "22": {
-        "S6": { "±0": { avg: 845000,  max: 1520000, min: 510000 }, "+1": { avg: 2080000, max: 3450000, min: 1380000 }, "+2": { avg: 3420000, max: 6200000, min: 2150000 } },
-        "S5": { "±0": { avg: 512000,  max: 890000,  min: 340000 }, "+1": { avg: 1260000, max: 2150000, min: 850000 },  "+2": { avg: 1980000, max: 3380000, min: 1320000 } },
-        "S4": { "±0": { avg: 548000,  max: 810000,  min: 385000 }, "+1": { avg: 1020000, max: 1680000, min: 710000 },  "+2": { avg: 1540000, max: 2480000, min: 1080000 } },
-        "S3": { "±0": { avg: 395000,  max: 640000,  min: 268000 }, "+1": { avg: 890000,  max: 1420000, min: 590000 },  "+2": { avg: 1240000, max: 1980000, min: 820000 } },
-        "S2": { "±0": { avg: 408000,  max: 615000,  min: 285000 }, "+1": { avg: 850000,  max: 1320000, min: 580000 },  "+2": { avg: 1050000, max: 1650000, min: 720000 } },
-        "S1": { "±0": { avg: 338000,  max: 510000,  min: 228000 }, "+1": { avg: 640000,  max: 980000,  min: 440000 },  "+2": { avg: 860000,  max: 1380000, min: 590000 } },
+        "S6": { "±0": { med: 820000,  max: 1520000, min: 510000 }, "+1": { med: 2050000, max: 3450000, min: 1380000 }, "+2": { med: 3380000, max: 6200000, min: 2150000 } },
+        "S5": { "±0": { med: 498000,  max: 890000,  min: 340000 }, "+1": { med: 1240000, max: 2150000, min: 850000 },  "+2": { med: 1950000, max: 3380000, min: 1320000 } },
+        "S4": { "±0": { med: 535000,  max: 810000,  min: 385000 }, "+1": { med: 995000,  max: 1680000, min: 710000 },  "+2": { med: 1510000, max: 2480000, min: 1080000 } },
+        "S3": { "±0": { med: 382000,  max: 640000,  min: 268000 }, "+1": { med: 870000,  max: 1420000, min: 590000 },  "+2": { med: 1210000, max: 1980000, min: 820000 } },
+        "S2": { "±0": { med: 395000,  max: 615000,  min: 285000 }, "+1": { med: 830000,  max: 1320000, min: 580000 },  "+2": { med: 1020000, max: 1650000, min: 720000 } },
+        "S1": { "±0": { med: 328000,  max: 510000,  min: 228000 }, "+1": { med: 625000,  max: 980000,  min: 440000 },  "+2": { med: 840000,  max: 1380000, min: 590000 } },
         
-        "A3": { "±0": { avg: 288000,  max: 425000,  min: 195000 }, "+1": { avg: 560000,  max: 880000,  min: 390000 },  "+2": { avg: 750000,  max: 1180000, min: 520000 } },
-        "A2": { "±0": { avg: 248000,  max: 368000,  min: 168000 }, "+1": { avg: 480000,  max: 745000,  min: 335000 },  "+2": { avg: 660000,  max: 1020000, min: 460000 } },
-        "A1": { "±0": { avg: 218000,  max: 328000,  min: 148000 }, "+1": { avg: 420000,  max: 645000,  min: 295000 },  "+2": { avg: 540000,  max: 830000,  min: 380000 } },
+        "A3": { "±0": { med: 278000,  max: 425000,  min: 195000 }, "+1": { med: 545000,  max: 880000,  min: 390000 },  "+2": { med: 730000,  max: 1180000, min: 520000 } },
+        "A2": { "±0": { med: 240000,  max: 368000,  min: 168000 }, "+1": { med: 468000,  max: 745000,  min: 335000 },  "+2": { med: 645000,  max: 1020000, min: 460000 } },
+        "A1": { "±0": { med: 212000,  max: 328000,  min: 148000 }, "+1": { med: 408000,  max: 645000,  min: 295000 },  "+2": { med: 525000,  max: 830000,  min: 380000 } },
         
-        "B3": { "±0": { avg: 158000,  max: 242000,  min: 112000 }, "+1": { avg: 335000,  max: 520000,  min: 228000 },  "+2": { avg: 445000,  max: 710000,  min: 310000 } },
-        "B2": { "±0": { avg: 142000,  max: 215000,  min: 98000 },  "+1": { avg: 305000,  max: 468000,  min: 210000 },  "+2": { avg: 425000,  max: 650000,  min: 290000 } },
-        "B1": { "±0": { avg: 136200,  max: 189500,  min: 102400 }, "+1": { avg: 254000,  max: 368000,  min: 191000 },  "+2": { avg: 352000,  max: 512000,  min: 275000 } },
+        "B3": { "±0": { med: 152000,  max: 242000,  min: 112000 }, "+1": { med: 325000,  max: 520000,  min: 228000 },  "+2": { med: 435000,  max: 710000,  min: 310000 } },
+        "B2": { "±0": { med: 138000,  max: 215000,  min: 98000 },  "+1": { med: 298000,  max: 468000,  min: 210000 },  "+2": { med: 415000,  max: 650000,  min: 290000 } },
+        "B1": { "±0": { med: 132000,  max: 189500,  min: 102400 }, "+1": { med: 248000,  max: 368000,  min: 191000 },  "+2": { med: 345000,  max: 512000,  min: 275000 } },
         
-        "C3": { "±0": { avg: 72000,   max: 128000,  min: 42000 },  "+1": { avg: 158000,  max: 285000,  min: 98000 },   "+2": { avg: 238000,  max: 410000,  min: 155000 } },
-        "C2": { "±0": { avg: 46000,   max: 82000,   min: 26000 },  "+1": { avg: 108000,  max: 195000,  min: 68000 },   "+2": { avg: 168000,  max: 295000,  min: 108000 } },
-        "C1": { "±0": { avg: 26500,   max: 52000,   min: 14500 },  "+1": { avg: 65000,   max: 125000,  min: 39000 },   "+2": { avg: 110000,  max: 198000,  min: 68000 } },
+        "C3": { "±0": { med: 69000,   max: 128000,  min: 42000 },  "+1": { med: 152000,  max: 285000,  min: 98000 },   "+2": { med: 230000,  max: 410000,  min: 155000 } },
+        "C2": { "±0": { med: 44000,   max: 82000,   min: 26000 },  "+1": { med: 104000,  max: 195000,  min: 68000 },   "+2": { med: 162000,  max: 295000,  min: 108000 } },
+        "C1": { "±0": { med: 25000,   max: 52000,   min: 14500 },  "+1": { med: 62000,   max: 125000,  min: 39000 },   "+2": { med: 106000,  max: 198000,  min: 68000 } },
         
-        "D3": { "±0": { avg: 10800,   max: 21500,   min: 5800 },   "+1": { avg: 36500,   max: 68000,   min: 21000 },   "+2": { avg: 59000,   max: 112000,  min: 34000 } },
-        "D2": { "±0": { avg: 5200,    max: 10500,   min: 2800 },   "+1": { avg: 15800,   max: 31000,   min: 8800 },    "+2": { avg: 26500,   max: 51000,   min: 15000 } },
-        "D1": { "±0": { avg: 2200,    max: 4800,    min: 1100 },   "+1": { avg: 7800,    max: 15500,   min: 3900 },    "+2": { avg: 15200,   max: 29800,   min: 8500 } }
+        "D3": { "±0": { med: 10200,   max: 21500,   min: 5800 },   "+1": { med: 35000,   max: 68000,   min: 21000 },   "+2": { med: 57000,   max: 112000,  min: 34000 } },
+        "D2": { "±0": { med: 4900,    max: 10500,   min: 2800 },   "+1": { med: 15200,   max: 31000,   min: 8800 },    "+2": { med: 25500,   max: 51000,   min: 15000 } },
+        "D1": { "±0": { med: 2100,    max: 4800,    min: 1100 },   "+1": { med: 7500,    max: 15500,   min: 3900 },    "+2": { med: 14800,   max: 29800,   min: 8500 } }
       },
       "24": {
-        "S6": { "±0": { avg: 885000,  max: 1610000, min: 535000 }, "+1": { avg: 2180000, max: 3620000, min: 1450000 }, "+2": { avg: 3580000, max: 6500000, min: 2250000 } },
-        "S5": { "±0": { avg: 538000,  max: 935000,  min: 358000 }, "+1": { avg: 1320000, max: 2260000, min: 890000 },  "+2": { avg: 2080000, max: 3550000, min: 1380000 } },
-        "S4": { "±0": { avg: 575000,  max: 850000,  min: 405000 }, "+1": { avg: 1070000, max: 1760000, min: 745000 },  "+2": { avg: 1610000, max: 2600000, min: 1130000 } },
-        "S3": { "±0": { avg: 415000,  max: 670000,  min: 282000 }, "+1": { avg: 935000,  max: 1490000, min: 620000 },  "+2": { avg: 1300000, max: 2080000, min: 860000 } },
-        "S2": { "±0": { avg: 428000,  max: 645000,  min: 298000 }, "+1": { avg: 890000,  max: 1380000, min: 608000 },  "+2": { avg: 1100000, max: 1730000, min: 755000 } },
-        "S1": { "±0": { avg: 355000,  max: 535000,  min: 239000 }, "+1": { avg: 670000,  max: 1030000, min: 462000 },  "+2": { avg: 902000,  max: 1450000, min: 620000 } },
+        "S6": { "±0": { med: 860000,  max: 1610000, min: 535000 }, "+1": { med: 2150000, max: 3620000, min: 1450000 }, "+2": { med: 3520000, max: 6500000, min: 2250000 } },
+        "S5": { "±0": { med: 520000,  max: 935000,  min: 358000 }, "+1": { med: 1290000, max: 2260000, min: 890000 },  "+2": { med: 2020000, max: 3550000, min: 1380000 } },
+        "S4": { "±0": { med: 560000,  max: 850000,  min: 405000 }, "+1": { med: 1040000, max: 1760000, min: 745000 },  "+2": { med: 1580000, max: 2600000, min: 1130000 } },
+        "S3": { "±0": { med: 402000,  max: 670000,  min: 282000 }, "+1": { med: 910000,  max: 1490000, min: 620000 },  "+2": { med: 1270000, max: 2080000, min: 860000 } },
+        "S2": { "±0": { med: 415000,  max: 645000,  min: 298000 }, "+1": { med: 870000,  max: 1380000, min: 608000 },  "+2": { med: 1070000, max: 1730000, min: 755000 } },
+        "S1": { "±0": { med: 345000,  max: 535000,  min: 239000 }, "+1": { med: 650000,  max: 1030000, min: 462000 },  "+2": { med: 880000,  max: 1450000, min: 620000 } },
         
-        "A3": { "±0": { avg: 302000,  max: 446000,  min: 205000 }, "+1": { avg: 588000,  max: 924000,  min: 409000 },  "+2": { avg: 788000,  max: 1240000, min: 546000 } },
-        "A2": { "±0": { avg: 260000,  max: 386000,  min: 176000 }, "+1": { avg: 504000,  max: 782000,  min: 352000 },  "+2": { avg: 692000,  max: 1070000, min: 483000 } },
-        "A1": { "±0": { avg: 228000,  max: 344000,  min: 155000 }, "+1": { avg: 441000,  max: 677000,  min: 310000 },  "+2": { avg: 567000,  max: 872000,  min: 399000 } },
+        "A3": { "±0": { med: 292000,  max: 446000,  min: 205000 }, "+1": { med: 572000,  max: 924000,  min: 409000 },  "+2": { med: 765000,  max: 1240000, min: 546000 } },
+        "A2": { "±0": { med: 252000,  max: 386000,  min: 176000 }, "+1": { med: 490000,  max: 782000,  min: 352000 },  "+2": { med: 675000,  max: 1070000, min: 483000 } },
+        "A1": { "±0": { med: 222000,  max: 344000,  min: 155000 }, "+1": { med: 428000,  max: 677000,  min: 310000 },  "+2": { med: 550000,  max: 872000,  min: 399000 } },
         
-        "B3": { "±0": { avg: 166000,  max: 254000,  min: 117000 }, "+1": { avg: 352000,  max: 546000,  min: 239000 },  "+2": { avg: 467000,  max: 745000,  min: 325000 } },
-        "B2": { "±0": { avg: 149000,  max: 226000,  min: 103000 }, "+1": { avg: 320000,  max: 491000,  min: 220000 },  "+2": { avg: 446000,  max: 682000,  min: 304000 } },
-        "B1": { "±0": { avg: 143000,  max: 198000,  min: 107000 }, "+1": { avg: 267000,  max: 386000,  min: 200000 },  "+2": { avg: 370000,  max: 538000,  min: 288000 } },
+        "B3": { "±0": { med: 160000,  max: 254000,  min: 117000 }, "+1": { med: 342000,  max: 546000,  min: 239000 },  "+2": { med: 455000,  max: 745000,  min: 325000 } },
+        "B2": { "±0": { med: 145000,  max: 226000,  min: 103000 }, "+1": { med: 312000,  max: 491000,  min: 220000 },  "+2": { med: 435000,  max: 682000,  min: 304000 } },
+        "B1": { "±0": { med: 138000,  max: 198000,  min: 107000 }, "+1": { med: 260000,  max: 386000,  min: 200000 },  "+2": { med: 362000,  max: 538000,  min: 288000 } },
         
-        "C3": { "±0": { avg: 75500,   max: 134000,  min: 44000 },  "+1": { avg: 166000,  max: 299000,  min: 103000 },  "+2": { avg: 250000,  max: 430000,  min: 163000 } },
-        "C2": { "±0": { avg: 48300,   max: 86000,   min: 27300 },  "+1": { avg: 113000,  max: 205000,  min: 71400 },   "+2": { avg: 176000,  max: 310000,  min: 113000 } },
-        "C1": { "±0": { avg: 27800,   max: 54600,   min: 15200 },  "+1": { avg: 68200,   max: 131000,  min: 40900 },   "+2": { avg: 115000,  max: 208000,  min: 71400 } },
+        "C3": { "±0": { med: 73000,   max: 134000,  min: 44000 },  "+1": { med: 160000,  max: 299000,  min: 103000 },  "+2": { med: 242000,  max: 430000,  min: 163000 } },
+        "C2": { "±0": { med: 46500,   max: 86000,   min: 27300 },  "+1": { med: 109000,  max: 205000,  min: 71400 },   "+2": { med: 170000,  max: 310000,  min: 113000 } },
+        "C1": { "±0": { med: 26500,   max: 54600,   min: 15200 },  "+1": { med: 65000,   max: 131000,  min: 40900 },   "+2": { med: 111000,  max: 208000,  min: 71400 } },
         
-        "D3": { "±0": { avg: 11300,   max: 22600,   min: 6090 },   "+1": { avg: 38300,   max: 71400,   min: 22000 },   "+2": { avg: 62000,   max: 117000,  min: 35700 } },
-        "D2": { "±0": { avg: 5460,    max: 11000,   min: 2940 },   "+1": { avg: 16600,   max: 32500,   min: 9240 },    "+2": { avg: 27800,   max: 53500,   min: 15700 } },
-        "D1": { "±0": { avg: 2310,    max: 5040,    min: 1150 },   "+1": { avg: 8190,    max: 16300,   min: 4090 },    "+2": { avg: 16000,   max: 31300,   min: 8920 } }
+        "D3": { "±0": { med: 10800,   max: 22600,   min: 6090 },   "+1": { med: 36800,   max: 71400,   min: 22000 },   "+2": { med: 60000,   max: 117000,  min: 35700 } },
+        "D2": { "±0": { med: 5200,    max: 11000,   min: 2940 },   "+1": { med: 16000,   max: 32500,   min: 9240 },    "+2": { med: 26800,   max: 53500,   min: 15700 } },
+        "D1": { "±0": { med: 2200,    max: 5040,    min: 1150 },   "+1": { med: 7900,    max: 16300,   min: 4090 },    "+2": { med: 15500,   max: 31300,   min: 8920 } }
       },
       "13": {
-        "S6": { "±0": { avg: 802000,  max: 1440000, min: 485000 }, "+1": { avg: 1970000, max: 3280000, min: 1310000 }, "+2": { avg: 3250000, max: 5890000, min: 2040000 } },
-        "S5": { "±0": { avg: 486000,  max: 845000,  min: 323000 }, "+1": { avg: 1190000, max: 2040000, min: 808000 },  "+2": { avg: 1880000, max: 3210000, min: 1250000 } },
-        "S4": { "±0": { avg: 520000,  max: 769000,  min: 366000 }, "+1": { avg: 969000,  max: 1590000, min: 674000 },  "+2": { avg: 1460000, max: 2350000, min: 1020000 } },
-        "S3": { "±0": { avg: 375000,  max: 608000,  min: 254000 }, "+1": { avg: 845000,  max: 1350000, min: 560000 },  "+2": { avg: 1180000, max: 1880000, min: 778000 } },
-        "S2": { "±0": { avg: 388000,  max: 584000,  min: 271000 }, "+1": { avg: 808000,  max: 1250000, min: 551000 },  "+2": { avg: 998000,  max: 1570000, min: 684000 } },
-        "S1": { "±0": { avg: 321000,  max: 485000,  min: 216000 }, "+1": { avg: 608000,  max: 931000,  min: 418000 },  "+2": { avg: 817000,  max: 1310000, min: 560000 } },
+        "S6": { "±0": { med: 780000,  max: 1440000, min: 485000 }, "+1": { med: 1920000, max: 3280000, min: 1310000 }, "+2": { med: 3180000, max: 5890000, min: 2040000 } },
+        "S5": { "±0": { med: 472000,  max: 845000,  min: 323000 }, "+1": { med: 1160000, max: 2040000, min: 808000 },  "+2": { med: 1820000, max: 3210000, min: 1250000 } },
+        "S4": { "±0": { med: 505000,  max: 769000,  min: 366000 }, "+1": { med: 945000,  max: 1590000, min: 674000 },  "+2": { med: 1420000, max: 2350000, min: 1020000 } },
+        "S3": { "±0": { med: 362000,  max: 608000,  min: 254000 }, "+1": { med: 825000,  max: 1350000, min: 560000 },  "+2": { med: 1150000, max: 1880000, min: 778000 } },
+        "S2": { "±0": { med: 375000,  max: 584000,  min: 271000 }, "+1": { med: 785000,  max: 1250000, min: 551000 },  "+2": { med: 970000,  max: 1570000, min: 684000 } },
+        "S1": { "±0": { med: 310000,  max: 485000,  min: 216000 }, "+1": { med: 590000,  max: 931000,  min: 418000 },  "+2": { med: 795000,  max: 1310000, min: 560000 } },
         
-        "A3": { "±0": { avg: 274000,  max: 404000,  min: 185000 }, "+1": { avg: 532000,  max: 836000,  min: 370000 },  "+2": { avg: 712000,  max: 1120000, min: 494000 } },
-        "A2": { "±0": { avg: 235000,  max: 350000,  min: 159000 }, "+1": { avg: 456000,  max: 708000,  min: 318000 },  "+2": { avg: 627000,  max: 969000,  min: 437000 } },
-        "A1": { "±0": { avg: 207000,  max: 312000,  min: 140000 }, "+1": { avg: 399000,  max: 613000,  min: 280000 },  "+2": { avg: 513000,  max: 788000,  min: 361000 } },
+        "A3": { "±0": { med: 265000,  max: 404000,  min: 185000 }, "+1": { med: 518000,  max: 836000,  min: 370000 },  "+2": { med: 695000,  max: 1120000, min: 494000 } },
+        "A2": { "±0": { med: 228000,  max: 350000,  min: 159000 }, "+1": { med: 442000,  max: 708000,  min: 318000 },  "+2": { med: 610000,  max: 969000,  min: 437000 } },
+        "A1": { "±0": { med: 201000,  max: 312000,  min: 140000 }, "+1": { med: 388000,  max: 613000,  min: 280000 },  "+2": { med: 498000,  max: 788000,  min: 361000 } },
         
-        "B3": { "±0": { avg: 150000,  max: 230000,  min: 106000 }, "+1": { avg: 318000,  max: 494000,  min: 216000 },  "+2": { avg: 423000,  max: 674000,  min: 295000 } },
-        "B2": { "±0": { avg: 135000,  max: 204000,  min: 93100 },  "+1": { avg: 290000,  max: 444000,  min: 199000 },  "+2": { avg: 404000,  max: 618000,  min: 275000 } },
-        "B1": { "±0": { avg: 129000,  max: 180000,  min: 97300 },  "+1": { avg: 241000,  max: 350000,  min: 181000 },  "+2": { avg: 334000,  max: 486000,  min: 261000 } },
+        "B3": { "±0": { med: 145000,  max: 230000,  min: 106000 }, "+1": { med: 308000,  max: 494000,  min: 216000 },  "+2": { med: 412000,  max: 674000,  min: 295000 } },
+        "B2": { "±0": { med: 131000,  max: 204000,  min: 93100 },  "+1": { med: 282000,  max: 444000,  min: 199000 },  "+2": { med: 392000,  max: 618000,  min: 275000 } },
+        "B1": { "±0": { med: 125000,  max: 180000,  min: 97300 },  "+1": { med: 235000,  max: 350000,  min: 181000 },  "+2": { med: 325000,  max: 486000,  min: 261000 } },
         
-        "C3": { "±0": { avg: 68400,   max: 122000,  min: 39900 },  "+1": { avg: 150000,  max: 271000,  min: 93100 },   "+2": { avg: 226000,  max: 389000,  min: 147000 } },
-        "C2": { "±0": { avg: 43700,   max: 77900,   min: 24700 },  "+1": { avg: 102000,  max: 185000,  min: 64600 },   "+2": { avg: 159000,  max: 280000,  min: 102000 } },
-        "C1": { "±0": { avg: 25200,   max: 49400,   min: 13800 },  "+1": { avg: 61800,   max: 118000,  min: 37000 },   "+2": { avg: 104000,  max: 188000,  min: 64600 } },
+        "C3": { "±0": { med: 66000,   max: 122000,  min: 39900 },  "+1": { med: 145000,  max: 271000,  min: 93100 },   "+2": { med: 218000,  max: 389000,  min: 147000 } },
+        "C2": { "±0": { med: 42000,   max: 77900,   min: 24700 },  "+1": { med: 98000,   max: 185000,  min: 64600 },   "+2": { med: 154000,  max: 280000,  min: 102000 } },
+        "C1": { "±0": { med: 24200,   max: 49400,   min: 13800 },  "+1": { med: 59000,   max: 118000,  min: 37000 },   "+2": { med: 101000,  max: 188000,  min: 64600 } },
         
-        "D3": { "±0": { avg: 10200,   max: 20400,   min: 5510 },   "+1": { avg: 34700,   max: 64600,   min: 19900 },   "+2": { avg: 56000,   max: 106000,  min: 32300 } },
-        "D2": { "±0": { avg: 4940,    max: 9980,    min: 2660 },   "+1": { avg: 1500,    max: 29500,   min: 8360 },    "+2": { avg: 25200,   max: 48500,   min: 14200 } },
-        "D1": { "±0": { avg: 2090,    max: 4560,    min: 1040 },   "+1": { avg: 7410,    max: 14700,   min: 3700 },    "+2": { avg: 14400,   max: 28300,   min: 8080 } }
+        "D3": { "±0": { med: 9800,    max: 20400,   min: 5510 },   "+1": { med: 33500,   max: 64600,   min: 19900 },   "+2": { med: 54000,   max: 106000,  min: 32300 } },
+        "D2": { "±0": { med: 4700,    max: 9980,    min: 2660 },   "+1": { med: 14500,   max: 29500,   min: 8360 },    "+2": { med: 24200,   max: 48500,   min: 14200 } },
+        "D1": { "±0": { med: 2000,    max: 4560,    min: 1040 },   "+1": { med: 7100,    max: 14700,   min: 3700 },    "+2": { med: 13900,   max: 28300,   min: 8080 } }
       }
     };
 
-    let currentRefStats = { avg: 0, max: 0, min: 0 };
+    let currentRefStats = { med: 0, max: 0, min: 0 };
 
-    // コアファン人数によるボーナス率計算 (Pococha仕様)
+    // 画像に基づくコアボーナス倍率判定（厳密仕様）
     function getCoreBonusRate(count) {
       if (count >= 500) return 1.22;
-      if (count >= 450) return 1.21;
-      if (count >= 400) return 1.20;
-      if (count >= 350) return 1.19;
+      if (count >= 400) return 1.21;
       if (count >= 300) return 1.20;
       if (count >= 250) return 1.19;
       if (count >= 200) return 1.18;
       if (count >= 150) return 1.17;
       if (count >= 100) return 1.16;
-      if (count >= 90) return 1.15;
-      if (count >= 80) return 1.14;
-      if (count >= 70) return 1.13;
-      if (count >= 60) return 1.12;
-      if (count >= 50) return 1.11;
-      if (count >= 45) return 1.10;
-      if (count >= 40) return 1.09;
-      if (count >= 35) return 1.08;
-      if (count >= 30) return 1.07;
-      if (count >= 25) return 1.06;
-      if (count >= 20) return 1.05;
-      if (count >= 15) return 1.04;
-      if (count >= 10) return 1.03;
-      if (count >= 5)  return 1.02;
-      if (count >= 2)  return 1.01;
+      if (count >= 90)  return 1.15;
+      if (count >= 80)  return 1.14;
+      if (count >= 70)  return 1.13;
+      if (count >= 60)  return 1.12;
+      if (count >= 50)  return 1.11;
+      if (count >= 45)  return 1.10;
+      if (count >= 40)  return 1.09;
+      if (count >= 35)  return 1.08;
+      if (count >= 30)  return 1.07;
+      if (count >= 25)  return 1.06;
+      if (count >= 20)  return 1.05;
+      if (count >= 15)  return 1.04;
+      if (count >= 10)  return 1.03;
+      if (count >= 5)   return 1.02;
+      if (count >= 2)   return 1.01;
       return 1.00;
     }
 
@@ -374,7 +368,7 @@
     function onPtBlur(input) {
       const val = parseInt(input.value.replace(/,/g, '')) || 0;
       input.value = val > 0 ? val.toLocaleString() : '';
-      calculateDifference();
+      calculate();
     }
 
     // 条件変更時
@@ -383,98 +377,98 @@
       const rank = document.getElementById('rankSelect').value;
       const border = document.getElementById('borderSelect').value;
 
-      currentRefStats = statsData[time]?.[rank]?.[border] || { avg: 0, max: 0, min: 0 };
+      currentRefStats = statsData[time]?.[rank]?.[border] || { med: 0, max: 0, min: 0 };
 
-      // 実測数値の表示更新
-      document.getElementById('refAvg').innerText = formatPt(currentRefStats.avg) + ' pt';
+      // 実測数値の表示更新（中央値・最高・最低）
+      document.getElementById('refMed').innerText = formatPt(currentRefStats.med) + ' pt';
       document.getElementById('refMax').innerText = formatPt(currentRefStats.max) + ' pt';
       document.getElementById('refMin').innerText = formatPt(currentRefStats.min) + ' pt';
 
-      // 初期値として目標ptに平均値をセット（カンマ付き）
-      document.getElementById('targetPtInput').value = formatPt(currentRefStats.avg);
+      // 初期値として「想定pt」に中央値をセット（カンマ付き）
+      document.getElementById('targetPtInput').value = formatPt(currentRefStats.med);
 
-      calculateDifference();
+      calculate();
     }
 
-    // ワンタップで実測値を目標ptに反映
+    // ワンタップで実測値を「想定pt」にセット
     function applyRef(type) {
-      const targetInput = document.getElementById('targetPtInput');
-      let val = 0;
-      if (type === 'avg') {
-        val = currentRefStats.avg;
+      if (type === 'med') {
+        document.getElementById('targetPtInput').value = formatPt(currentRefStats.med);
       } else if (type === 'max') {
-        val = currentRefStats.max;
+        document.getElementById('targetPtInput').value = formatPt(currentRefStats.max);
+      } else if (type === 'min') {
+        document.getElementById('targetPtInput').value = formatPt(currentRefStats.min);
       }
-      targetInput.value = formatPt(val);
-      calculateDifference();
+      calculate();
     }
 
-    // 差分計算＆表示のリアルタイム更新
-    function calculateDifference() {
+    // メイン計算処理
+    function calculate() {
       // カンマを取り除いて数値に変換
       const targetRaw = document.getElementById('targetPtInput').value.replace(/,/g, '');
       const currentRaw = document.getElementById('currentPtInput').value.replace(/,/g, '');
-      
+
       const targetPt = parseInt(targetRaw) || 0;
       const currentPt = parseInt(currentRaw) || 0;
       const coreCount = parseInt(document.getElementById('coreCountSelect').value) || 0;
 
-      // コアボーナス倍率
-      const bonusRate = getCoreBonusRate(coreCount);
-      const bonusPercent = Math.round((bonusRate - 1) * 100);
+      // コアボーナス取得
+      const coreBonus = getCoreBonusRate(coreCount);
+      const bonusPercentDisplay = Math.round(coreBonus * 100);
+      const bonusUpDisplay = Math.round((coreBonus - 1) * 100);
 
       // コアボーナスバッジ更新
-      document.getElementById('coreBonusBadge').innerText = `ボーナス: +${bonusPercent}% (${Math.round(bonusRate * 100)}%)`;
+      document.getElementById('coreBonusBadge').innerText = `ボーナス: ${bonusPercentDisplay}% (+${bonusUpDisplay}%)`;
 
-      // 必要pt
       const diffPt = targetPt - currentPt;
-      // 必要コイン数
-      const coin = Math.ceil(diffPt / (4 * bonusRate));
 
-      // 未達成の場合
-      if (diffPt > 0) {
-        // 計算結果メイン表示カード
-        document.getElementById('resultCard').className = "bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 text-white rounded-2xl p-6 shadow-xl transition-all";
-        // 目標ボーダー
-        document.getElementById('resultSubTitle').innerText = "目標ボーダーまで あと";
-        // 必要pt 表示
-        document.getElementById('diffPtDisplay').innerText = formatPt(diffPt);
-        // 必要pt 単位
-        document.getElementById('diffPtUnit').style.display = "inline";
+      if (diffPt <= 0) {
+        // 必要コイン 表示
+        document.getElementById('neededCoins').innerText = "到達済み！🎉";
+        // 必要コイン 単位
+        document.getElementById('neededCoinsUnit').style.display = "none";
         // 馬車 必要個数
-        document.getElementById('carriageCount').innerText = formatPt(Math.ceil(coin / 5555));
-        // 馬車 必要個数 単位
-        document.getElementById('carriageCountUnit').innerText = "個";
+        document.getElementById('carriageCount').innerText = "0";
         // 花火 必要個数
-        document.getElementById('fireworkCount').innerText = formatPt(Math.ceil(coin / 1080));
-        // 花火 必要個数 単位
-        document.getElementById('fireworkCountUnit').innerText = "個";
+        document.getElementById('fireworkCount').innerText = "0";
+        // 必要pt
+        document.getElementById('statusDetail').style.display = "none";
+        return;
       }
-      // 到達済みの場合
-      else {
-        // 計算結果メイン表示カード
-        document.getElementById('resultCard').className = "bg-gradient-to-br from-emerald-900 via-teal-950 to-slate-950 text-white rounded-2xl p-6 shadow-xl transition-all";
-        // 目標ボーダー
-        document.getElementById('resultSubTitle').innerText = "目標ボーダー";
-        // 必要pt 表示
-        document.getElementById('diffPtDisplay').innerText = "到達中！🎉";
-        // 必要pt 単位
-        document.getElementById('diffPtUnit').style.display = "none";
-        // 馬車 必要個数
-        document.getElementById('carriageCount').innerText = "達成済み";
-        // 馬車 必要個数 単位
-        document.getElementById('carriageCountUnit').innerText = "";
-        // 花火 必要個数
-        document.getElementById('fireworkCount').innerText = "達成済み";
-        // 花火 必要個数 単位
-        document.getElementById('fireworkCountUnit').innerText = "";
-      }
+
+      // 式①: 必要コイン数 ＝ (想定pt - 現在pt) ÷ (4 × コアボーナス)  [切り上げ]
+      const neededCoins = Math.ceil(diffPt / (4 * coreBonus));
+
+      // 式②: 馬車 ＝ 必要コイン数 ÷ 5555  [切り上げ]
+      const carriage = Math.ceil(neededCoins / 5555);
+
+      // 式③: 花火 ＝ 必要コイン数 ÷ 1080  [切り上げ]
+      const firework = Math.ceil(neededCoins / 1080);
+
+      // 画面出力
+      document.getElementById('neededCoins').innerText = formatPt(neededCoins);
+      document.getElementById('neededCoinsUnit').style.display = "inline";
+      document.getElementById('carriageCount').innerText = formatPt(carriage);
+      document.getElementById('fireworkCount').innerText = formatPt(firework);
+      document.getElementById('statusDetail').innerHTML = `あと <strong>${formatPt(diffPt)} pt</strong> 不足中`;
+      document.getElementById('statusDetail').style.display = "block";
     }
 
-    // 初回読み込み
+    // 初回実行
     window.onload = function() {
       onConditionChange();
     };
+
+    document.getElementById('targetPtInput').addEventListener('input', (e) => {
+      // 全角数字 (０-９) を半角数字 (0-9) に変換
+      e.target.value = e.target.value.replace(/[０-９]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xFEE0));
+    });
+
+    document.getElementById('currentPtInput').addEventListener('input', (e) => {
+      // 全角数字 (０-９) を半角数字 (0-9) に変換
+      e.target.value = e.target.value.replace(/[０-９]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xFEE0));
+    });
+
   </script>
 </body>
 </html>
