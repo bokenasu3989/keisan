@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pococha メーター目標 & コアボーナスリアルタイム計算ツール</title>
+  <title>Pococha 計算ツール</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -134,7 +134,8 @@
             </div>
           </div>
           <div class="relative">
-            <input type="number" id="targetPtInput" oninput="calculateDifference()" 
+            <input type="text" id="targetPtInput" 
+                   onfocus="onPtFocus(this)" onblur="onPtBlur(this)" oninput="calculateDifference()" 
                    class="w-full text-base font-bold text-indigo-900 bg-indigo-50/40 border-2 border-indigo-200 rounded-xl py-2 pl-3 pr-8 focus:border-indigo-600 focus:outline-none">
             <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-indigo-400">pt</span>
           </div>
@@ -148,7 +149,8 @@
             </label>
           </div>
           <div class="relative">
-            <input type="number" id="currentPtInput" value="80000" step="1000" oninput="calculateDifference()" 
+            <input type="text" id="currentPtInput" value="80,000" 
+                   onfocus="onPtFocus(this)" onblur="onPtBlur(this)" oninput="calculateDifference()" 
                    class="w-full text-base font-bold text-emerald-900 bg-emerald-50/40 border-2 border-emerald-300 rounded-xl py-2 pl-3 pr-8 focus:border-emerald-600 focus:outline-none">
             <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-500">pt</span>
           </div>
@@ -161,13 +163,37 @@
               <i class="fa-solid fa-users text-pink-600 mr-1"></i>コアファン数
             </label>
             <span id="coreBonusBadge" class="text-[11px] font-bold text-pink-600 bg-pink-50 px-2 py-0.5 rounded-full border border-pink-200">
-              ボーナス: +5% (105%)
             </span>
           </div>
           <div class="relative">
-            <input type="number" id="coreCountInput" value="20" min="0" oninput="calculateDifference()" 
-                   class="w-full text-base font-bold text-pink-900 bg-pink-50/40 border-2 border-pink-300 rounded-xl py-2 pl-3 pr-8 focus:border-pink-600 focus:outline-none">
-            <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-pink-500">人</span>
+            <select id="coreCountSelect" onchange="calculateDifference()" 
+                    class="w-full text-base font-bold text-pink-900 bg-pink-50/40 border-2 border-pink-300 rounded-xl py-2.5 pl-3 pr-8 focus:border-pink-600 focus:outline-none">
+              <option value="0">0人 (+0%)</option>
+              <option value="2">2人 (+1%)</option>
+              <option value="5">5人 (+2%)</option>
+              <option value="10">10人 (+3%)</option>
+              <option value="15">15人 (+4%)</option>
+              <option value="20" selected>20人 (+5%)</option>
+              <option value="25">25人 (+6%)</option>
+              <option value="30">30人 (+7%)</option>
+              <option value="35">35人 (+8%)</option>
+              <option value="40">40人 (+9%)</option>
+              <option value="45">45人 (+10%)</option>
+              <option value="50">50人 (+11%)</option>
+              <option value="60">60人 (+12%)</option>
+              <option value="70">70人 (+13%)</option>
+              <option value="80">80人 (+14%)</option>
+              <option value="90">90人 (+15%)</option>
+              <option value="100">100人以上 (+16%)</option>
+              <option value="150">150人以上 (+17%)</option>
+              <option value="200">200人以上 (+18%)</option>
+              <option value="250">250人以上 (+19%)</option>
+              <option value="300">300人以上 (+20%)</option>
+              <option value="350">350人以上 (+19%)</option>
+              <option value="400">400人以上 (+20%)</option>
+              <option value="450">450人以上 (+21%)</option>
+              <option value="500">500人以上 (+22%)</option>
+            </select>
           </div>
         </div>
 
@@ -339,6 +365,18 @@
       return num.toLocaleString();
     }
 
+    // 入力欄にフォーカスした時（カンマを外して編集しやすくする）
+    function onPtFocus(input) {
+      input.value = input.value.replace(/,/g, '');
+    }
+
+    // 入力欄からフォーカスが外れた時（カンマ区切りにする）
+    function onPtBlur(input) {
+      const val = parseInt(input.value.replace(/,/g, '')) || 0;
+      input.value = val > 0 ? val.toLocaleString() : '';
+      calculateDifference();
+    }
+
     // 条件変更時
     function onConditionChange() {
       const time = document.getElementById('timeSelect').value;
@@ -352,27 +390,34 @@
       document.getElementById('refMax').innerText = formatPt(currentRefStats.max) + ' pt';
       document.getElementById('refMin').innerText = formatPt(currentRefStats.min) + ' pt';
 
-      // 初期値として目標ptに平均値をセット
-      document.getElementById('targetPtInput').value = currentRefStats.avg;
+      // 初期値として目標ptに平均値をセット（カンマ付き）
+      document.getElementById('targetPtInput').value = formatPt(currentRefStats.avg);
 
       calculateDifference();
     }
 
     // ワンタップで実測値を目標ptに反映
     function applyRef(type) {
+      const targetInput = document.getElementById('targetPtInput');
+      let val = 0;
       if (type === 'avg') {
-        document.getElementById('targetPtInput').value = currentRefStats.avg;
+        val = currentRefStats.avg;
       } else if (type === 'max') {
-        document.getElementById('targetPtInput').value = currentRefStats.max;
+        val = currentRefStats.max;
       }
+      targetInput.value = formatPt(val);
       calculateDifference();
     }
 
     // 差分計算＆表示のリアルタイム更新
     function calculateDifference() {
-      const targetPt = parseInt(document.getElementById('targetPtInput').value) || 0;
-      const currentPt = parseInt(document.getElementById('currentPtInput').value) || 0;
-      const coreCount = parseInt(document.getElementById('coreCountInput').value) || 0;
+      // カンマを取り除いて数値に変換
+      const targetRaw = document.getElementById('targetPtInput').value.replace(/,/g, '');
+      const currentRaw = document.getElementById('currentPtInput').value.replace(/,/g, '');
+      
+      const targetPt = parseInt(targetRaw) || 0;
+      const currentPt = parseInt(currentRaw) || 0;
+      const coreCount = parseInt(document.getElementById('coreCountSelect').value) || 0;
 
       // コアボーナス倍率
       const bonusRate = getCoreBonusRate(coreCount);
